@@ -38,7 +38,7 @@ namespace Crud
             services.ConfigureApplicationCookie(je =>
             {
                 je.Cookie.HttpOnly   = true;
-                je.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                je.ExpireTimeSpan = TimeSpan.FromMinutes(10);
                 je.LoginPath         = "/Identity/Account/Login";
                 je.AccessDeniedPath  = "/Identity/Account/AccessDenied";
                 je.SlidingExpiration = true;

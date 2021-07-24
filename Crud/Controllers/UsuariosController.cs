@@ -1,7 +1,9 @@
 ﻿using Crud.Data;
 using Crud.Models;
+using Crud.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Crud.Controllers
 {
-    [Authorize]
+     [Authorize]
     public class UsuariosController : Controller
     {   
         private readonly ApplicationDbContext _applicationDbContext;
@@ -22,13 +24,22 @@ namespace Crud.Controllers
         [Authorize(Roles = "jefe,empleado")]
         public IActionResult Index()
         {
-            List<Persona> usarios = new List<Persona>();
-            usarios = _applicationDbContext.Persona.ToList();
+            List<PersonaViewModel> usarios = new List<PersonaViewModel>();
+            usarios = _applicationDbContext.Persona.Select(p => new PersonaViewModel
+            {
+                Codigo= p.Codigo,
+                Nombre=p.Nombre,
+                Apellido=p.Apellido,
+                Estado=p.Estado,
+                Direccion=p.Direccion,
+                DescripcionGenero=p.CodigoGeneroNavigation.Descripcion
+
+            }).ToList();
 
             return View(usarios);
         }
 
-        [Authorize(Roles = "jefe,empleado")]
+          [Authorize(Roles = "jefe,empleado")]
         public IActionResult Details(int id)
         {
             if (id== 0)
@@ -38,34 +49,36 @@ namespace Crud.Controllers
             if (persona==null)
                 return RedirectToAction("Index");
 
-            return View(persona);
+           return View(persona);
         }
 
-        [Authorize(Roles = "jefe")]
+           [Authorize(Roles = "jefe")]
         public IActionResult Create()
-        {     
+        {
+            ViewData["CodigoGenero"] = new SelectList(_applicationDbContext.Generos.Where(p => p.Estado == 1).ToList(),"Codigo","Descripcion");          
             return View();
         }
 
-        [Authorize(Roles = "jefe")]
+           [Authorize(Roles = "jefe")]
         [HttpPost]
         public IActionResult Create(Persona persona)
         {
             try
             {
-                //persona.Estado = 1;
-
+              persona.Estado = 1;
              _applicationDbContext.Add(persona);
-            _applicationDbContext.SaveChanges();
+             _applicationDbContext.SaveChanges();
             }
             catch(Exception)
             {
+                ViewData["CodigoGenero"] = new SelectList(_applicationDbContext.Generos.Where(p => p.Estado == 1).ToList(), "Codigo", "Descripcion", persona.CodigoGenero);
+
                 return View(persona);
             }
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "jefe")]
+          [Authorize(Roles = "jefe")]
         public IActionResult Edit(int id)
         {
             if(id == 0)
@@ -77,6 +90,8 @@ namespace Crud.Controllers
             
             if(persona==null)
                 return RedirectToAction("Index");
+
+            ViewData["CodigoGenero"] = new SelectList(_applicationDbContext.Generos.Where(p => p.Estado == 1).ToList(), "Codigo", "Descripcion", persona.CodigoGenero);
 
             return View(persona);
         }
@@ -95,12 +110,14 @@ namespace Crud.Controllers
             }
             catch (Exception)
             {
+                ViewData["CodigoGenero"] = new SelectList(_applicationDbContext.Generos.Where(p => p.Estado == 1).ToList(), "Codigo", "Descripcion", persona.CodigoGenero);
+
                 return View(persona);
             }
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "jefe")]
+         [Authorize(Roles = "jefe")]
         public IActionResult Desactivar(int id)
         {
             if (id == 0)
