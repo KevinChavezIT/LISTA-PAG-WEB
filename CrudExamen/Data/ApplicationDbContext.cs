@@ -42,26 +42,7 @@ namespace CrudExamen.Data
                 //.IsRequired();               
                 
             });
-            builder.Entity<Cuenta>(so => {
-
-                so.HasKey(s => s.Numero);
-
-
-                so.Property(s => s.SaldoTotal)
-                .IsRequired()
-                .HasMaxLength(100)
-                .IsUnicode(false);
-
-                so.Property(s => s.CodigoSocio)
-                .IsRequired()
-                .HasMaxLength(100)
-                .IsUnicode(false);
-
-                so.Property(s => s.Estado)
-                .IsRequired();               
-            });
-        }
-
-        public DbSet<CrudExamen.Models.Cuenta> Cuenta { get; set; }
+            
+        }     
     }
 }
