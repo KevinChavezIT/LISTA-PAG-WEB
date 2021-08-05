@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace DatosVehiculo.Data
 {
-    public class AplicationUser:IdentityUser
+    public class UserRole:IdentityRole
     {
-
     }
 }

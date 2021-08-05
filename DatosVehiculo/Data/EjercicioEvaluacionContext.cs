@@ -1,5 +1,7 @@
 ﻿using System;
+using DatosVehiculo.Data;
 using DatosVehiculo.Model;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -7,11 +9,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DatosVehiculo.ModelosNuevos
 {
-    public partial class EjercicioEvaluacionContext : DbContext
-    {
-        public EjercicioEvaluacionContext()
-        {
-        }
+    public partial class EjercicioEvaluacionContext : IdentityDbContext<AplicationUser, UserRole, string>
+    {     
 
         public EjercicioEvaluacionContext(DbContextOptions<EjercicioEvaluacionContext> options)
             : base(options)

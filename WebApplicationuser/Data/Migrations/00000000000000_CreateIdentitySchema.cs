@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace EvaluacionCrud.Data.Migrations
+namespace WebApplicationuser.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

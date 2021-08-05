@@ -1,6 +1,7 @@
 ﻿
 using DatosVehiculo.Model;
 using DatosVehiculo.ModelosNuevos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace EvaluacionCrud.Controllers
 {
+    [Authorize]
     public class VehiculosController : Controller
     {
         private readonly EjercicioEvaluacionContext _context;
@@ -19,6 +21,7 @@ namespace EvaluacionCrud.Controllers
             _context = context;
         }
 
+        [Authorize(Roles ="tecnico,publico")]
         // GET: VehiculosController
         public ActionResult Index()
         {
@@ -27,6 +30,7 @@ namespace EvaluacionCrud.Controllers
             return View(listvehi);
         }
 
+        [Authorize(Roles = "tecnico,publico")]
         // GET: VehiculosController/Details/5
         public ActionResult Details(int id)
         {
@@ -35,12 +39,14 @@ namespace EvaluacionCrud.Controllers
             return View(vehiculo);
         }
 
+        [Authorize(Roles = "tecnico")]
         // GET: VehiculosController/Create
         public ActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "tecnico")]
         // POST: VehiculosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -60,6 +66,7 @@ namespace EvaluacionCrud.Controllers
             }
         }
 
+        [Authorize(Roles = "tecnico")]
         // GET: VehiculosController/Edit/5
         public ActionResult Edit(int id)
         {
@@ -68,6 +75,7 @@ namespace EvaluacionCrud.Controllers
             return View(vehiculo);
         }
 
+        [Authorize(Roles = "tecnico")]
         // POST: VehiculosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -90,6 +98,7 @@ namespace EvaluacionCrud.Controllers
             }
         }
 
+        [Authorize(Roles = "tecnico")]
         // GET: VehiculosController/Delete/5
         public ActionResult Desactivar(int id)
         {
@@ -101,6 +110,7 @@ namespace EvaluacionCrud.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "tecnico ")]
         public ActionResult Activar(int id)
         {
             Vehiculo vehiculo = _context.Vehiculo.Where(v => v.Codigo == id).FirstOrDefault();

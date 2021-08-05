@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EvaluacionCrud.Data
+namespace WebApplicationuser.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
