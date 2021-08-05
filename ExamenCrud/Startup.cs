@@ -32,9 +32,18 @@ namespace ExamenCrud
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<ApliUser,RolesUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.ConfigureApplicationCookie(es => {
+                es.Cookie.HttpOnly = true;
+                es.ExpireTimeSpan = TimeSpan.FromMinutes(2);
+                es.LoginPath = "/Identity/Account/Login";
+                es.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                es.SlidingExpiration = true;
+
+            });
             services.AddControllersWithViews();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

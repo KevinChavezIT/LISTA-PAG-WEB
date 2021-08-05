@@ -1,5 +1,7 @@
-﻿using ExamenCrud.Data;
+﻿using DatosCrud.Models;
+using ExamenCrud.Data;
 using ExamenCrud.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ExamenCrud.Controllers
 {
+    [Authorize]
     public class SociosController : Controller
     {
         private readonly ApplicationDbContext _applicationDbContext;
@@ -18,6 +21,7 @@ namespace ExamenCrud.Controllers
             _applicationDbContext= applicationDbContext;
         }
 
+        [Authorize(Roles ="Boss,Persona")]
         // GET: SociosController
         public ActionResult Index()
         {
@@ -27,6 +31,7 @@ namespace ExamenCrud.Controllers
             return View(listsocios);
         }
 
+        [Authorize(Roles = "Boss,Persona")]
         // GET: SociosController/Details/5
         public ActionResult Details(string id)
         {
@@ -35,12 +40,14 @@ namespace ExamenCrud.Controllers
             return View(socio);
         }
 
+        [Authorize(Roles = "Boss")]
         // GET: SociosController/Create
         public ActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Boss")]
         // POST: SociosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -59,6 +66,7 @@ namespace ExamenCrud.Controllers
             }
         }
 
+        [Authorize(Roles = "Boss")]
         // GET: SociosController/Edit/5
         public ActionResult Edit(string id)
         {
@@ -67,6 +75,7 @@ namespace ExamenCrud.Controllers
             return View(socio);
         }
 
+        [Authorize(Roles = "Boss")]
         // POST: SociosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -88,6 +97,8 @@ namespace ExamenCrud.Controllers
                 return View(socio);
             }
         }
+
+        [Authorize(Roles = "Boss")]
         public ActionResult Activar(string id)
         {
             Socio socio = _applicationDbContext.Socios.Where(s => s.Cedula == id).FirstOrDefault();
@@ -97,6 +108,8 @@ namespace ExamenCrud.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "Boss")]
         public ActionResult Desactivar(string id)
         {
             Socio socio = _applicationDbContext.Socios.Where(s => s.Cedula == id).FirstOrDefault();
